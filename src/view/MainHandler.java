@@ -37,11 +37,8 @@ public class MainHandler implements ActionListener {
             }else if (source.equals(view.getBtnQuery()))  {
                 try {
                     String query = view.getQuery();
-                    ResultSet rs = statement.executeQuery(query);
-                    System.out.println(rs);
-                    while (rs.next()) {
-                        view.getOutputField().setText(rs.getString(1));
-                    }
+                    System.out.println(query);
+                    model.outputQuery(query);
                 } catch (Exception e) {
                     throw new IllegalArgumentException("terjadi kesalahan saat mengeksekusi query");
                 }

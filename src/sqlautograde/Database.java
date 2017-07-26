@@ -54,7 +54,6 @@ public class Database {
         try {
             String query = "select * from teacher where name='" + p.getName() + "' and password = '" + p.getPassword() + "'";
             ResultSet rs = statement.executeQuery(query);
-            System.out.println(rs);
             if (rs.next()) {
                 return true;
             } else {
@@ -64,7 +63,41 @@ public class Database {
             throw new IllegalArgumentException("terjadi kesalahan saat login");
         }
     }
-
+    
+    public String getOQuery(String q) throws SQLException {
+        try {
+            System.out.println(q);
+            ResultSet rs = statementAnswer.executeQuery(q);
+            System.out.println(rs.getMetaData());
+            if (rs.next()) {
+                return rs.toString();
+            } else {
+                return "Error";
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("terjadi kesalahan saat login");
+        }
+    }
+    
+    public void saveQuestion(Question q) {
+        try {
+            String query = "insert into questions values"
+                    + "('" + q.getQId() + "', NULL,"
+                    + "'" + q.getQText() + "', "
+                    + "'" + q.getQuery()
+                    + "',NULL)";
+            System.out.print(query);
+            statement.execute(query, Statement.RETURN_GENERATED_KEYS);
+//            ResultSet rs = statement.getGeneratedKeys();
+//            if (rs.next()) {
+//                int generatedId = rs.getInt(1);
+//                q.setQId(generatedId);
+//            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("terjadi kesalahan saat save soal");
+        }
+    }
+    
     public Teacher getAccount(String name) {
         try {
             String query = "select * from teacher Where name ='" + name + "'";
@@ -76,24 +109,6 @@ public class Database {
             return null;
         } catch (Exception e) {
             throw new IllegalArgumentException("terjadi kesalahan saat load siswa");
-        }
-    }
-
-    public void saveQuestion(Question q) {
-        try {
-            String query = "insert into questions(question_text,question_query,query_result) values"
-                    + "('" + q.getQText() + "', "
-                    + "'" + q.getQuery() + "', "
-                    + "'" + q.getResult() 
-                    + "')";
-            statement.execute(query, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()) {
-                int generatedId = rs.getInt(1);
-                q.setQId(generatedId);
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException("terjadi kesalahan saat save soal");
         }
     }
 
